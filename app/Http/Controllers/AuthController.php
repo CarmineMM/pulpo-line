@@ -77,10 +77,47 @@ class AuthController extends Controller
     }
 
     /**
-     * Login method
+     * @OA\Post(
+     *     path="/api/login",
+     *     summary="Iniciar sesión de usuario",
+     *     tags={"Auth"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"email","password"},
+     *             @OA\Property(property="email", type="string", format="email", example="usuario@example.com"),
+     *             @OA\Property(property="password", type="string", format="password", example="password123")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Inicio de sesión exitoso",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="access_token", type="string", example="1|XyZ123..."),
+     *                 @OA\Property(property="token_type", type="string", example="Bearer")
+     *             ),
+     *             @OA\Property(property="message", type="string", example="Inicio de sesión exitoso")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Error de validación o credenciales inválidas",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Las credenciales proporcionadas no son correctas"),
+     *             @OA\Property(property="errors", type="object",
+     *                 @OA\Property(property="email", type="array",
+     *                     @OA\Items(type="string", example="Las credenciales proporcionadas no son correctas")
+     *                 )
+     *             )
+     *         )
+     *     )
+     * )
+     *
+     * Inicia sesión de un usuario existente y devuelve un token de acceso.
      *
      * @param Request $request
-     * @return void
+     * @return \Illuminate\Http\JsonResponse
      */
     public function login(Request $request)
     {
@@ -106,7 +143,31 @@ class AuthController extends Controller
     }
 
     /**
-     * Logout app
+     * @OA\Post(
+     *     path="/api/logout",
+     *     summary="Cerrar sesión",
+     *     tags={"Auth"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Cierre de sesión exitoso",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Sesión cerrada exitosamente")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="No autenticado",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Unauthenticated")
+     *         )
+     *     )
+     * )
+     *
+     * Cierra la sesión del usuario actual y revoca el token de acceso.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function logout(Request $request)
     {

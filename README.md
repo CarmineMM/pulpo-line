@@ -176,9 +176,9 @@ http://localhost:8000/api/documentation
 
 ## 🛠️ Tecnologías Utilizadas
 
--   **Backend:** Laravel 10.x
+-   **Backend:** Laravel ^12.0
 -   **Autenticación:** Laravel Sanctum
--   **Base de Datos:** MySQL o Postgres
+-   **Base de Datos:** MySQL, Postgres o cualquier base de datos soportada por Laravel
 -   **Documentación:** Swagger/OpenAPI
 -   **Pruebas:** PHPUnit
 

@@ -7,9 +7,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Response;
 
 class AuthController extends Controller
 {
+    /**
+     * Register method
+     *
+     * @param Request $request
+     * @return void
+     */
     public function register(Request $request)
     {
         $request->validate([
@@ -24,9 +31,15 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return response()->json(['message' => 'User registered successfully'], 201);
+        return $this->success(message: __('auth.register_successful'), code: Response::HTTP_CREATED);
     }
 
+    /**
+     * Login method
+     *
+     * @param Request $request
+     * @return void
+     */
     public function login(Request $request)
     {
         $request->validate([
@@ -38,21 +51,24 @@ class AuthController extends Controller
 
         if (! $user || ! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
-                'email' => ['The provided credentials are not correct.'],
+                'email' => [__('auth.credentials')],
             ]);
         }
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return response()->json([
+        return $this->success([
             'access_token' => $token,
             'token_type' => 'Bearer',
-        ]);
+        ], __('auth.login_successful'));
     }
 
+    /**
+     * Logout app
+     */
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
-        return response()->json(['message' => 'Logged out successfully']);
+        return $this->success(message: __('auth.logout_successful'));
     }
 }

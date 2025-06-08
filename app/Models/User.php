@@ -46,4 +46,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function favoriteCities()
+    {
+        return $this->hasMany(FavoriteCity::class);
+    }
+
+    public function searchHistories()
+    {
+        return $this->hasMany(SearchHistory::class);
+    }
 }

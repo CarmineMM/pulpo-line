@@ -19,9 +19,9 @@ class WeatherService
      * Obtiene el clima actual para una ciudad específica.
      *
      * @param string $city
-     * @return void
+     * @return array
      */
-    public function getCurrentWeather(string $city)
+    public function getCurrentWeather(string $city): array
     {
         return Cache::remember(
             "weather.{$city}",
